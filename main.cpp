@@ -29,30 +29,30 @@ float depth = 32.0f;
 
 int main(void) {
 
-    wstring map;
+    string map;
 
     // # - wall
     // . - free cell
-    map += L"####################";
-    map += L"#..................#";
-    map += L"#.......#..........#";
-    map += L"################.###";
-    map += L"#....#.............#";
-    map += L"#....#.............#";
-    map += L"#....#.............#";
-    map += L"#........##....#...#";
-    map += L"#........##....#...#";
-    map += L"#..................#";
-    map += L"#..................#";
-    map += L"#....#.............#";
-    map += L"#....#.............#";
-    map += L"#....#.............#";
-    map += L"#....#.............#";
-    map += L"#....#.............#";
-    map += L"#....#.#############";
-    map += L"#....#.............#";
-    map += L"#....#.............#";
-    map += L"####################";
+    map += "####################";
+    map += "#..................#";
+    map += "#.......#..........#";
+    map += "###############..###";
+    map += "#....#.............#";
+    map += "#....#.............#";
+    map += "#....#.............#";
+    map += "#........##........#";
+    map += "#........##....#...#";
+    map += "#..................#";
+    map += "#..................#";
+    map += "#....#.............#";
+    map += "#....#.............#";
+    map += "#....#.............#";
+    map += "#....#.............#";
+    map += "#....#.............#";
+    map += "#....#.#############";
+    map += "#....#.............#";
+    map += "#....#.............#";
+    map += "####################";
 
     auto tp1 = chrono::system_clock::now();
     auto tp2 = chrono::system_clock::now();
@@ -61,6 +61,7 @@ int main(void) {
     settings.antialiasingLevel = 8;
 
     RenderWindow window(VideoMode(SCREEN_WIDTH, SCREEN_HEIGHT), "RayCasting!", sf::Style::Default, settings);
+    // window.setFramerateLimit(60); // Frame limit to 60 FPS
 
     Texture wall;
     wall.loadFromFile("Textures/wall4.png");
@@ -73,6 +74,7 @@ int main(void) {
 
     // Game loop
     while (window.isOpen()) {
+
         tp2 = chrono::system_clock::now();
         chrono::duration<float> time = tp2 - tp1;
         tp1 = tp2;
@@ -101,7 +103,7 @@ int main(void) {
             playerX += sinf(playerA) * 5.0f * elaspedTime;
             playerY += cosf(playerA) * 5.0f * elaspedTime;
 
-            if (map[(int)playerY * MAP_WIDTH + (int)playerX] == '#')
+            if (map[(int)(playerY + 0.2) * MAP_WIDTH + (int)(playerX - 0.2)] == '#' || map[(int)(playerY + 0.2) * MAP_WIDTH + (int)(playerX + 0.2)] == '#' || map[(int)(playerY - 0.2) * MAP_WIDTH + (int)(playerX + 0.2)] == '#')
             {
                 playerX -= sinf(playerA) * 5.0f * elaspedTime;
                 playerY -= cosf(playerA) * 5.0f * elaspedTime;
@@ -111,7 +113,7 @@ int main(void) {
             playerX -= sinf(playerA) * 5.0f * elaspedTime;
             playerY -= cosf(playerA) * 5.0f * elaspedTime;
 
-            if (map[(int)playerY * MAP_WIDTH + (int)playerX] == '#')
+            if (map[(int)(playerY + 0.2) * MAP_WIDTH + (int)(playerX - 0.2)] == '#' || map[(int)(playerY + 0.2) * MAP_WIDTH + (int)(playerX + 0.2)] == '#' || map[(int)(playerY - 0.2) * MAP_WIDTH + (int)(playerX + 0.2)] == '#')
             {
                 playerX += sinf(playerA) * 5.0f * elaspedTime;
                 playerY += cosf(playerA) * 5.0f * elaspedTime;
@@ -183,13 +185,11 @@ int main(void) {
 
             int height = floor - celling;
 
-            if (i == 0) cout << distanceToWall << " " << celling << " " << floor << " " << height << endl;
+            // RectangleShape line(Vector2f(graphicQuality, height));
+            // line.setPosition(Vector2f(i, celling));
 
-            RectangleShape line(Vector2f(graphicQuality, height));
-            line.setPosition(Vector2f(i, celling));
-
-            int opacity = (distanceToWall * 255 / depth) * 1.2;
-            line.setFillColor(Color(0, 0, 0, opacity));
+            // int opacity = (distanceToWall * 255 / depth) * 1.2;
+            // line.setFillColor(Color(0, 0, 0, opacity));
 
             Sprite temp = wallSprite;
 
@@ -201,7 +201,7 @@ int main(void) {
             temp.setPosition(Vector2f(i, celling));
 
             window.draw(temp);
-            window.draw(line);
+            // window.draw(line);
         }
 
         cout << "FPS = " << 1.0f / elaspedTime << endl;
